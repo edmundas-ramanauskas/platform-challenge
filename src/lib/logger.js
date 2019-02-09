@@ -1,3 +1,3 @@
-const bunyan = require('bunyan');
+import bunyan from 'bunyan';
 
-module.exports = name => bunyan.createLogger({ name });
+export default name => bunyan.createLogger({ name });

@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 const TEXT_ENCODING = 'utf8';
 const CIPHER_ENCODING = 'hex';
@@ -9,7 +9,7 @@ const getKey = pass =>
     .digest('base64')
     .substr(0, 32);
 
-class Cipher {
+export default class Cipher {
   constructor(iv, algo = 'aes-256-ctr') {
     this.iv = iv.slice(0, 16);
     this.algo = algo;
@@ -35,5 +35,3 @@ class Cipher {
     ].join('');
   }
 }
-
-module.exports = Cipher;

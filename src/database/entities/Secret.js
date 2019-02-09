@@ -1,7 +1,7 @@
-const { EntitySchema } = require('typeorm');
-const { Secret } = require('../models');
+import { EntitySchema } from 'typeorm';
+import { Secret } from '../models';
 
-module.exports = new EntitySchema({
+const Schema = new EntitySchema({
   name: 'Secret',
   target: Secret,
   tableName: 'secrets',
@@ -15,3 +15,5 @@ module.exports = new EntitySchema({
     },
   },
 });
+
+export default Schema;

@@ -1,11 +1,10 @@
-const { createConnection } = require('typeorm');
+import { createConnection } from 'typeorm';
+import Secret from './entities/Secret';
 
-module.exports = (url, type = 'postgres') => createConnection({
+export default (url, type = 'postgres') => createConnection({
   url,
   type,
-  entities: [
-    require('./entities/Secret'),
-  ],
+  entities: [Secret],
   logging: true,
   // dropSchema: true,
   synchronize: true,

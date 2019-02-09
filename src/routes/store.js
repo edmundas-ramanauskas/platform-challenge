@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 
-module.exports = ({ logger, secrets: secretsService }) => {
+export default ({ logger, secrets: secretsService }) => {
   const router = express.Router();
 
   router.post('/persist/:id', async (req, res) => {

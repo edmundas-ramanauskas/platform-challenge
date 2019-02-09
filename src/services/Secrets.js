@@ -1,7 +1,7 @@
-const { Like } = require('typeorm');
-const { Secret } = require('../database/models');
+import { Like } from 'typeorm';
+import { Secret } from '../database/models';
 
-class Secrets {
+export default class Secrets {
   constructor({ cipher, connection, logger }) {
     this.cipher = cipher;
     this.connection = connection;
@@ -62,5 +62,3 @@ class Secrets {
     return [secret];
   }
 }
-
-module.exports = Secrets;

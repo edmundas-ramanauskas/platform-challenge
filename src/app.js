@@ -1,14 +1,13 @@
-'use strict';
-
-const express = require('express');
-const morgan = require('morgan');
-const createLogger = require('./lib/logger');
-const Cipher = require('./services/Cipher');
-const Secrets = require('./services/Secrets');
-const createConnection = require('./database');
-const indexRouter = require('./routes/index');
-const storeRouter = require('./routes/store');
-const { SEED, DATABASE_URL } = require('./config');
+import '@babel/polyfill';
+import express from 'express';
+import morgan from 'morgan';
+import createLogger from './lib/logger';
+import Cipher from './services/Cipher';
+import Secrets from './services/Secrets';
+import createConnection from './database';
+import indexRouter from './routes/index';
+import storeRouter from './routes/store';
+import { SEED, DATABASE_URL } from './config';
 
 const createApp = async () => {
   const app = express();
@@ -27,4 +26,5 @@ const createApp = async () => {
   return app;
 };
 
+// eslint-disable-next-line import/no-commonjs
 module.exports = createApp;

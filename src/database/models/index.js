@@ -1,5 +1,1 @@
-const Secret = require('./Secret');
-
-module.exports = {
-  Secret,
-};
+export { default as Secret } from './Secret';
