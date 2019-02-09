@@ -7,6 +7,6 @@ module.exports = (url, type = 'postgres') => createConnection({
     require('./entities/Secret'),
   ],
   logging: true,
-  dropSchema: true,
+  // dropSchema: true,
   synchronize: true,
 });
