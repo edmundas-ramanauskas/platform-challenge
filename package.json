@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "eslint": "eslint --ext .js src"
   },
   "dependencies": {
     "bunyan": "^1.8.12",
@@ -14,6 +15,8 @@
     "typeorm": "^0.2.12"
   },
   "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-node": "^4.0.0",
     "nodemon": "^1.18.9"
   }
 }

@@ -35,6 +35,7 @@ class Secrets {
   }
 
   async findSecretsByPrefix(prefix, pass) {
+    const secretsRepository = this.connection.getRepository(Secret);
     const secrets = await secretsRepository.find({
       id: Like(prefix),
     });
@@ -55,11 +56,10 @@ class Secrets {
       const prefix = `${id.slice(0, -1)}%`;
       const secrets = await this.findSecretsByPrefix(prefix, pass);
       return secrets;
-    } else {
-      // find secret by exact id
-      const secret = await this.findSecretById(id, pass);
-      return [secret];
-    }
+    } 
+    // find secret by exact id
+    const secret = await this.findSecretById(id, pass);
+    return [secret];
   }
 }
 

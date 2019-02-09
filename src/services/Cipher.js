@@ -3,21 +3,20 @@ const crypto = require('crypto');
 const TEXT_ENCODING = 'utf8';
 const CIPHER_ENCODING = 'hex';
 
+const getKey = pass =>
+  crypto.createHash('sha256')
+    .update(pass)
+    .digest('base64')
+    .substr(0, 32);
+
 class Cipher {
   constructor(iv, algo = 'aes-256-ctr') {
     this.iv = iv.slice(0, 16);
     this.algo = algo;
   }
 
-  getKey(pass) {
-    return crypto.createHash('sha256')
-      .update(pass)
-      .digest('base64')
-      .substr(0, 32);
-  }
-
   encrypt(pass, data) {
-    const key = this.getKey(pass);
+    const key = getKey(pass);
     const cipher = crypto.createCipheriv(this.algo, key, this.iv);
 
     return [
@@ -27,7 +26,7 @@ class Cipher {
   }
 
   decrypt(pass, data) {
-    const key = this.getKey(pass);
+    const key = getKey(pass);
     const decipher = crypto.createDecipheriv(this.algo, key, this.iv)
 
     return [
