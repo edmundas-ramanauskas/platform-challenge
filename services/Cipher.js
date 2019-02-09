@@ -1,5 +1,8 @@
 const crypto = require('crypto');
 
+const TEXT_ENCODING = 'utf8';
+const CIPHER_ENCODING = 'hex';
+
 class Cipher {
   constructor(iv, algo = 'aes-256-ctr') {
     this.iv = iv.slice(0, 16);
@@ -18,8 +21,8 @@ class Cipher {
     const cipher = crypto.createCipheriv(this.algo, key, this.iv);
 
     return [
-      cipher.update(data, 'utf8', 'hex'),
-      cipher.final('hex'),
+      cipher.update(data, TEXT_ENCODING, CIPHER_ENCODING),
+      cipher.final(CIPHER_ENCODING),
     ].join('');
   }
 
@@ -28,8 +31,8 @@ class Cipher {
     const decipher = crypto.createDecipheriv(this.algo, key, this.iv)
 
     return [
-      decipher.update(data, 'hex', 'utf8'),
-      decipher.final('utf8'),
+      decipher.update(data, CIPHER_ENCODING, TEXT_ENCODING),
+      decipher.final(TEXT_ENCODING),
     ].join('');
   }
 }
