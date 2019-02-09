@@ -2,9 +2,21 @@ const { Like } = require('typeorm');
 const { Secret } = require('../database/models');
 
 class Secrets {
-  constructor({ cipher, connection }) {
+  constructor({ cipher, connection, logger }) {
     this.cipher = cipher;
     this.connection = connection;
+    this.logger = logger;
+  }
+
+  decrypt(pass, value) {
+    try {
+      const decrypted = this.cipher.decrypt(pass, value);
+      // JSON.parse will fail if decryption key was wrong
+      return JSON.parse(decrypted);
+    } catch (error) {
+      this.logger.error('DECRYPTION_ERROR', { error });
+      throw error;
+    }
   }
 
   saveSecret({ id, value }, pass) {
@@ -18,8 +30,8 @@ class Secrets {
   async findSecretById(id, pass) {
     const secretsRepository = this.connection.getRepository(Secret);
     const { value, ...secret } = await secretsRepository.findOne(id);
-    const decrypted = this.cipher.decrypt(pass, value);
-    return { ...secret, value: JSON.parse(decrypted) };
+    const decrypted = this.decrypt(pass, value);
+    return { ...secret, value: decrypted };
   }
 
   async findSecretsByPrefix(prefix, pass) {
@@ -27,9 +39,14 @@ class Secrets {
       id: Like(prefix),
     });
     return secrets.map(({ value, ...secret }) => {
-      const decrypted = this.cipher.decrypt(pass, value);
-      return { ...secret, value: JSON.parse(decrypted) };
-    });
+      try {
+        const decrypted = this.decrypt(pass, value);
+        return { ...secret, value: decrypted };
+      } catch {
+        // ignore secret if decryption fails
+        return null;
+      }
+    }).filter(secret => !!secret);
   }
 
   async findSecrets(id, pass) {
@@ -39,7 +56,7 @@ class Secrets {
       const secrets = await this.findSecretsByPrefix(prefix, pass);
       return secrets;
     } else {
-      // find secret by id
+      // find secret by exact id
       const secret = await this.findSecretById(id, pass);
       return [secret];
     }
