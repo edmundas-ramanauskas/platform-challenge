@@ -1,19 +1,41 @@
 version: '3.4'
 
 services:
+  postgres:
+    image: postgres:9.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    logging:
+      driver: json-file
+      options:
+        max-size: '10k'
+        max-file: '3'
+    networks:
+      default:
+        aliases:
+          - postgres.local
+
   webapp:
     build:
       context: .
       dockerfile: Dockerfile
     command: npm start
+    depends_on:
+      - postgres
     ports:
       - "8080:8080"
     environment:
       PORT: 8080
       SEED: 123e4567-e89b-42d3-a456-556642440000
+      DATABASE_URL: postgres://postgres:postgres@postgres.local/alacrity
     volumes:
       - ./:/home/app
       - node_modules_webapp:/home/app/node_modules
 
 volumes:
+  postgres_data:
   node_modules_webapp:
