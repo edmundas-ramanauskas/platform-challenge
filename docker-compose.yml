@@ -28,7 +28,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       PORT: 8080
       SEED: 123e4567-e89b-42d3-a456-556642440000
