@@ -2,8 +2,9 @@ version: '3.4'
 
 services:
   postgres:
-    image: postgres:9.5
+    image: postgres:11.1-alpine
     environment:
+      POSTGRES_DB: alacrity
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data

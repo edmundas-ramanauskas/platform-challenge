@@ -1,23 +1,27 @@
 const express = require('express');
 
-function routerResolver({ cipher }) {
+module.exports = ({ secrets }) => {
   const router = express.Router();
 
-  router.post('/persist/:id', function(req, res) {
-    // const { id } = req.params;
+  router.post('/persist/:id', (req, res) => {
+    const { id } = req.params;
     const { encryption_key: pass, value } = req.body;
-    const encrypted = cipher.encrypt(pass, value);
-    res.send(encrypted);
+    secrets.saveSecret({ id, value }, pass).then(() => {
+      res.send({ success: true });
+    }).catch(error => {
+      res.send({ success: false });
+    });
   });
 
-  router.post('/retrieve/:id', function(req, res) {
-    // const { id } = req.params;
-    const { encryption_key: pass, value } = req.body;
-    const decrypted = cipher.decrypt(pass, value);
-    res.send(decrypted);
+  router.post('/retrieve/:id', (req, res) => {
+    const { id } = req.params;
+    const { encryption_key } = req.body;
+    secrets.findSecrets(id, encryption_key).then(secret => {
+      res.send(secret);
+    }).catch(error => {
+      res.send([]);
+    });
   });
 
   return router;
-}
-
-module.exports = routerResolver;
+};
