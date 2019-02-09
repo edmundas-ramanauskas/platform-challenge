@@ -15,6 +15,7 @@ module.exports = ({ logger, secrets: secretsService }) => {
     }
   });
 
+  // using post so that `encryption_key` is not exposed via url params
   router.post('/retrieve/:id', async (req, res) => {
     const { id } = req.params;
     const { encryption_key } = req.body;

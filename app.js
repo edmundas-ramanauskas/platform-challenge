@@ -25,6 +25,6 @@ const createApp = async () => {
   app.use('/storage', storeRouter({ logger, secrets }));
 
   return app;
-}
+};
 
 module.exports = createApp;
