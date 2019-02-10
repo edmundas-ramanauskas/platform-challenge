@@ -1,11 +1,14 @@
 import express from 'express';
 
+const getEcnryptionKey = ({ headers }) => headers['encryption-key'];
+
 export default ({ logger, secrets: secretsService }) => {
   const router = express.Router();
 
   router.post('/persist/:id', async (req, res) => {
     const { id } = req.params;
-    const { encryption_key: pass, value } = req.body;
+    const { value } = req.body;
+    const pass = getEcnryptionKey(req);
     try {
       await secretsService.saveSecret({ id, value }, pass);
       res.send({ success: true });
@@ -15,12 +18,11 @@ export default ({ logger, secrets: secretsService }) => {
     }
   });
 
-  // using post so that `encryption_key` is not exposed via url params
-  router.post('/retrieve/:id', async (req, res) => {
+  router.get('/retrieve/:id', async (req, res) => {
     const { id } = req.params;
-    const { encryption_key } = req.body;
+    const pass = getEcnryptionKey(req);
     try {
-      const secrets = await secretsService.findSecrets(id, encryption_key);
+      const secrets = await secretsService.findSecrets(id, pass);
       res.send(secrets);
     } catch (error) {
       logger.error('RETRIEVE_ERROR', { error });
