@@ -5,6 +5,8 @@ const createApp = require('./app');
 const debug = require('debug')('alacrity:server');
 const http = require('http');
 
+// TODO: improve app start-up
+// currently app won't start if database is down
 createApp().then(app => {
   /**
    * Get port from environment and store in Express.
