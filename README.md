@@ -8,7 +8,7 @@ In the project directory, you can run:
 
 Runs eslint to check for syntax and style errors
 
-### 'docer-compose up`
+### `docer-compose up`
 
 Builds and starts app containers
 
